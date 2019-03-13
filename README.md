@@ -1,0 +1,2 @@
+# pydicom_helper
+pydicomを用いてDICOM RT解析するときのHelper
