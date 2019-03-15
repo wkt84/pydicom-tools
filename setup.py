@@ -1,4 +1,3 @@
-# -*- coding:utf-8 -*-
 import setuptools
 
 with open("README.md", "r") as fh:
@@ -6,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pydicom-tools",
-    version="0.1.2",
+    version="0.0.3",
     author="Akihisa Wakita",
     author_email="wakita84@gmail.com",
     description="Tools for dicom RT analysis with pydicom",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/wkt84/pydicom_tools",
+    url="https://github.com/wkt84/pydicom-tools",
     packages=setuptools.find_packages(),
     install_requires=[
         "pydicom",
