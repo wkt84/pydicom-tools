@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pydicom-tools",
-    version="0.0.3",
+    name="pydicom_tools",
+    version="0.0.5post1",
     author="Akihisa Wakita",
     author_email="wakita84@gmail.com",
     description="Tools for dicom RT analysis with pydicom",
