@@ -1,0 +1,1 @@
+name = 'pydicom-tools'

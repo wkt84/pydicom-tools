@@ -1,2 +1,3 @@
-# pydicom_helper
-pydicomを用いてDICOM RT解析するときのHelper
+# pydicom tools
+
+Analyzing tools for DICOM RT with pydicom
