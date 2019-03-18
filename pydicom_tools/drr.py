@@ -3,6 +3,7 @@ import itk
 
 from .ct import CTImage
 
+
 def make_drr(ct, beam):
     """
     CTImageクラスのインスタンスとBeamからDRR生成
@@ -15,10 +16,10 @@ def make_drr(ct, beam):
         BeamSequenceの要素
     """
     if not isinstance(ct, CTImage):
-        return
+        raise TypeError("1st argument must be the instance of CTImage class.")
 
     # isocenter座標、ガントリ角、カウチ角度の取り出し
-    cp_0 = beam.ControlPointSequence[0] # 最初のコントロールポイント
+    cp_0 = beam.ControlPointSequence[0]  # 最初のコントロールポイント
     isocenter = cp_0.IsocenterPosition
     gan_angle = np.radians(float(cp_0.GantryAngle))
     couch_angle = np.radians(float(cp_0.PatientSupportAngle))
@@ -27,7 +28,9 @@ def make_drr(ct, beam):
     image = itk.GetImageFromArray(ct.volume.astype(np.int16))
 
     # 原点位置をIsocenter位置に設定
-    origin = (ct.position[0]-isocenter[0], ct.position[1]-isocenter[1], -ct.position[2]+isocenter[2])
+    origin = (ct.position[0] - isocenter[0],
+              ct.position[1] - isocenter[1],
+              -ct.position[2]+isocenter[2])
     # ボクセル間隔を設定
     spacing = (ct.pixel_spacing[0], ct.pixel_spacing[1], ct.thickness)
 
@@ -46,7 +49,7 @@ def make_drr(ct, beam):
     c_sin = np.sin(couch_angle)
     c_cos = np.cos(couch_angle)
 
-    focus = (1000*g_sin*c_cos, -1000* g_cos, 1000*g_sin*c_sin)
+    focus = (1000*g_sin*c_cos, -1000*g_cos, 1000*g_sin*c_sin)
     interp.SetFocalPoint(focus)
 
     # 仮想線源位置が変更された際の変換
@@ -63,7 +66,7 @@ def make_drr(ct, beam):
     interp.SetThreshold(-200)
 
     # 25x25cm^2のDRRを生成
-    drr = np.zeros((250,250))
+    drr = np.zeros((250, 250))
 
     for i in range(250):
         for j in range(250):
@@ -71,5 +74,5 @@ def make_drr(ct, beam):
                      (i-125)*g_sin,
                      (i-125)*g_cos*c_sin+(j-125)*c_cos)
             drr[j, i] = interp.Evaluate(query)
-    
+
     return drr
