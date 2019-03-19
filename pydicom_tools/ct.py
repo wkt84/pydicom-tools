@@ -54,7 +54,7 @@ class CTImage:
             self.z_min = min(_dcm_files.values())
             self.z_max = max(_dcm_files.values())
             self.z_array = np.linspace(
-                self.z_min, self.z_max, num=self.number_of_slices)
+                self.z_max, self.z_min, num=self.number_of_slices)
             self.is_loaded = True
         else:
             return "There are no CT seriese or more than 2 CT seriese."
