@@ -15,6 +15,11 @@ ct.load(path_to_ct)
 ## DRRの生成
 
 以下の方法でDRRを生成します。
+DRRの作成にはITKが必要です。事前にpipなどでインストールしてください。
+
+```console
+pip install itk
+```
 
 ```python
 from pydicom_tools import DRR

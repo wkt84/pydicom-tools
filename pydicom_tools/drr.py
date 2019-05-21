@@ -1,11 +1,11 @@
 import numpy as np
+from .ct import CTImage
+
+ITK_AVAILABLE = True
 try:
     import itk
-    ITK_AVAILABLE = True
 except ImportError:
     ITK_AVAILABLE = False
-
-from .ct import CTImage
 
 
 class DRR:
