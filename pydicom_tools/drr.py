@@ -1,5 +1,9 @@
 import numpy as np
-import itk
+try:
+    import itk
+    ITK_AVAILABLE = True
+except ImportError:
+    ITK_AVAILABLE = False
 
 from .ct import CTImage
 
@@ -9,9 +13,15 @@ class DRR:
     DRRに関するクラス
     """
     def __init__(self, ct, beam, size=256):
-        self.size = size
-        self.image = self._make_drr(ct, beam, size)
-        self.extent = (-size/2., size/2., -size/2., size/2.)
+        if ITK_AVAILABLE:
+            self.size = size
+            self.image = self._make_drr(ct, beam, size)
+            self.extent = (-size/2., size/2., -size/2., size/2.)
+        else:
+            print(
+                'You need ITK to make DRR.\n'
+                'Install ITK with "pip install itk".'
+            )
 
     def _make_drr(self, ct, beam, size):
         """
