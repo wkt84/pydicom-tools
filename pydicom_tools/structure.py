@@ -97,3 +97,30 @@ class RTSS:
             _colors[_structure] = _color
 
         return _colors
+
+    def calc_volume(self, structure_name):
+        """
+        structure_name : str
+        """
+        if structure_name not in self.structures.values():
+            raise ValueError(f"{structure_name} was not found.")
+
+        _points = self.points[structure_name]
+        _thickness = self._calc_thickness(_points)
+
+        _s = 0
+
+        for pts in _points.values():
+            for p in pts:
+                for i in range(len(p)-1):
+                    _s += (p[i][0] * p[i+1][1] - p[i+1][0] * p[i][1]) / 2.
+
+        _v = _s * _thickness / 1000.
+
+        return _v
+
+    def _calc_thickness(self, _points):
+        _z_list = [z for z in _points.keys()]
+        _z_diff = np.diff(sorted(_z_list))
+
+        return _z_diff.min()
