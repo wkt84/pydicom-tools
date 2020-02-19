@@ -15,6 +15,10 @@ class RTSS:
     def __init__(self, path):
         self._rtss = pydicom.dcmread(path)
 
+        # Modalityチェック
+        if self._rtss.Modality != 'RTSTRUCT':
+            raise TypeError('This file is not DICOM RT StructureSet.')
+
         self.structures = {}
         for roi in self._rtss.StructureSetROISequence:
             self.structures[roi.ROINumber] = roi.ROIName
@@ -29,6 +33,10 @@ class RTSS:
         for contour in self._rtss.ROIContourSequence:
             _structure = self.structures[contour.ReferencedROINumber]
             _points = {}
+            # Emptyか確認
+            if not hasattr(contour, 'ContourSequence'):
+                _points_dict[_structure] = None
+                continue
             for c in contour.ContourSequence:
                 if c.ContourGeometricType != 'CLOSED_PLANAR':
                     continue
@@ -53,6 +61,11 @@ class RTSS:
             _structure = self.structures[contour.ReferencedROINumber]
             _points = self.points[_structure]
             _paths = {}
+
+            # Emptyか確認
+            if _points is None:
+                _paths_dict[_structure] = None
+                continue
 
             for z, p in _points.items():
                 if len(p) > 1:
@@ -84,15 +97,13 @@ class RTSS:
                 _color = [
                     float(contour.ROIDisplayColor[0]) / 255.,
                     float(contour.ROIDisplayColor[1]) / 255.,
-                    float(contour.ROIDisplayColor[2]) / 255.,
-                    0.2
+                    float(contour.ROIDisplayColor[2]) / 255., 0.2
                 ]
             else:
                 _color = [
                     random.random() / 255.,
                     random.random() / 255.,
-                    random.random() / 255.,
-                    0.2
+                    random.random() / 255., 0.2
                 ]
             _colors[_structure] = _color
 
@@ -106,14 +117,18 @@ class RTSS:
             raise ValueError(f"{structure_name} was not found.")
 
         _points = self.points[structure_name]
+
+        if _points is None:
+            raise ValueError(f"{structure_name} is empty.")
+
         _thickness = self._calc_thickness(_points)
 
         _s = 0
 
         for pts in _points.values():
             for p in pts:
-                for i in range(len(p)-1):
-                    _s += (p[i][0] * p[i+1][1] - p[i+1][0] * p[i][1]) / 2.
+                for i in range(len(p) - 1):
+                    _s += (p[i][0] * p[i + 1][1] - p[i + 1][0] * p[i][1]) / 2.
 
         _v = _s * _thickness / 1000.
 
