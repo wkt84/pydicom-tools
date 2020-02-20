@@ -16,6 +16,7 @@ setuptools.setup(
     install_requires=[
         "pydicom",
         "numpy",
+        "matplotlib",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -13,7 +13,6 @@ class CTImage:
 
     でpathに存在するCTシリーズを読み込み
     """
-
     def __init__(self):
         """コンストラクタ"""
         self.is_loaded = False
@@ -44,17 +43,19 @@ class CTImage:
                 i += 1
             self.x_min = float(self.position[0])
             self.x_max = self.x_min + \
-                (self.columns - 1) * float(self.pixel_spacing[0])
-            self.x_array = np.linspace(
-                self.x_min, self.x_max, num=self.columns)
+                (self.columns - 1) * float(self.pixel_spacing[1])
+            self.x_array = np.linspace(self.x_min,
+                                       self.x_max,
+                                       num=self.columns)
             self.y_min = float(self.position[1])
             self.y_max = self.y_min + \
-                (self.rows - 1) * float(self.pixel_spacing[1])
+                (self.rows - 1) * float(self.pixel_spacing[0])
             self.y_array = np.linspace(self.y_min, self.y_max, num=self.rows)
             self.z_min = min(_dcm_files.values())
             self.z_max = max(_dcm_files.values())
-            self.z_array = np.linspace(
-                self.z_max, self.z_min, num=self.number_of_slices)
+            self.z_array = np.linspace(self.z_max,
+                                       self.z_min,
+                                       num=self.number_of_slices)
             self.is_loaded = True
         else:
             return "There are no CT seriese or more than 2 CT seriese."
