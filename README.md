@@ -50,3 +50,21 @@ paths = ss.paths['Structure Name']
 # 輪郭の体積を計算
 volume = ss.calc_volume('Structure Name')
 ```
+
+## RT Doseの読み込み
+
+以下の方法でRT Doseを読み込みます。
+
+```python
+from pydicom_tools import Dose
+dose_data = Dose('path/to/dose')
+
+# 3次元線量分布
+dose = dose_data.dose
+
+# z = 0 [mm] の axial断面取り出し
+dose_ax = dose_data.get_2d_plane(0, axis='axial')
+
+# (x, y, z) = (0, 0, 0) [mm] の点線量の取り出し
+dose_point = dose_data.get_point_dose([0, 0, 0])
+```
