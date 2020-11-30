@@ -124,3 +124,5 @@ dmypy.json
 
 # VScode
 .vscode/
+
+sample/
