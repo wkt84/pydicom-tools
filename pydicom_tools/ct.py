@@ -70,7 +70,7 @@ class CTImage:
                 if pydicom.misc.is_dicom(os.path.join(path, file_path)):
                     dcm_data = pydicom.dcmread(os.path.join(path, file_path))
                     if dcm_data.Modality == 'CT':
-                        slice_position = float(dcm_data.SliceLocation)
+                        slice_position = float(dcm_data.ImagePositionPatient[2])
                         _dcm_files[file_path] = slice_position
             return _dcm_files
         else:
